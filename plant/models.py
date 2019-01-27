@@ -19,7 +19,17 @@ class Product(models.Model):
 
 
 class PlanningData(models.Model):
-    pass
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    FG_code = models.CharField(max_length=500)
+    DT_hrs = models.DecimalField(max_digits=5, decimal_places=2)
+
+
+class HeadCount(models.Model):
+    ker = models.DecimalField(max_digits=5, decimal_places=2)
+    no_of_working_days = models.DecimalField(max_digits=5, decimal_places=2)
+    working_hours_per_day = models.DecimalField(max_digits=5, decimal_places=2)
+    testing_people = models.DecimalField(max_digits=5, decimal_places=2)
+
 
 
 
