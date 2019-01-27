@@ -16,3 +16,14 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_family
+
+
+class PlanningData(models.Model):
+    pass
+
+
+
+
+
+
+
