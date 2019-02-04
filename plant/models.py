@@ -49,7 +49,7 @@ class PlanningData(models.Model):
 
     @property
     def dt_value(self):
-        return self.DT_hrs * self.yearly_product_quantity
+        return round(self.DT_hrs * self.yearly_product_quantity, DECIMAL_PLACES)
 
     def __str__(self):
         return "{} | {}".format(self.product_id, self.FG_code)

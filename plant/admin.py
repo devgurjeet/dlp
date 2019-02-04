@@ -4,6 +4,8 @@ from django.contrib import admin
 from .models import Plant, Product, PlanningData, HeadCount
 
 admin.site.site_header = 'DLP administration'
+admin.site.site_title = "DLP administration"
+
 
 
 class PlantViewAdmin(admin.ModelAdmin):
@@ -18,6 +20,7 @@ class ProductViewAdmin(admin.ModelAdmin):
 
 class PlanningDataViewAdmin(admin.ModelAdmin):
     list_display = ['plant_id', 'fg_description', 'FG_code', 'DT_hrs', 'month', 'yearly_product_quantity', 'dt_value']
+    list_filter = ('month',)
 
     def plant_id(self, instance):
         return instance.product_id.plant_id
@@ -27,13 +30,18 @@ class PlanningDataViewAdmin(admin.ModelAdmin):
 
 
 class HeadCountViewAdmin(admin.ModelAdmin):
-    list_display = ['plant_id', 'plant_family', 'month', 'ker', 'quantity', 'dt', 'otr', 'head_count']
+    list_display = ('plant_id', 'plant_family', 'month', 'ker', 'quantity', 'dt', 'otr', 'head_count')
+    list_filter = ('month',)
 
     def plant_id(self, instance):
         return instance.product_id.plant_id
 
     def plant_family(self, instance):
         return instance.product_id
+
+
+
+
 
 
 admin.site.register(Plant, PlantViewAdmin)
