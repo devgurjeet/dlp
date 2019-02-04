@@ -1,5 +1,8 @@
 from django.db import models
 from django.db.models import Sum
+from decimal import Decimal
+
+DECIMAL_PLACES = 2
 
 MONTH_CHOICES = (
     ('1', 'January'),
@@ -44,10 +47,9 @@ class PlanningData(models.Model):
     month = models.CharField(max_length=2, choices=MONTH_CHOICES)
     yearly_product_quantity = models.DecimalField(max_digits=20, decimal_places=2)
 
-
     @property
     def dt_value(self):
-        return (self.DT_hrs * self.yearly_product_quantity)
+        return self.DT_hrs * self.yearly_product_quantity
 
     def __str__(self):
         return "{} | {}".format(self.product_id, self.FG_code)
@@ -64,10 +66,27 @@ class HeadCount(models.Model):
     @property
     def quantity(self):
         qty = PlanningData.objects.filter(month=self.month).aggregate(Sum('yearly_product_quantity'))
-        return qty['yearly_product_quantity__sum']
+        return round(qty['yearly_product_quantity__sum'], DECIMAL_PLACES)
 
+    @property
+    def dt(self):
+        dt_values = 0
+
+        items = PlanningData.objects.filter(month=self.month)
+
+        for item in items:
+            dt_values += item.dt_value
+
+        return round(dt_values, DECIMAL_PLACES)
+
+    @property
+    def otr(self):
+        return round(self.dt / self.ker, DECIMAL_PLACES)
+
+    @property
+    def head_count(self):
+        return round((self.otr / self.no_of_working_days / self.working_hours_per_day) - self.testing_people,
+                     DECIMAL_PLACES)
 
     def __str__(self):
         return self.month
-
-
